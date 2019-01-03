@@ -1,0 +1,12 @@
+.content-container {
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.view {
+    height: 100%;
+    min-width: 300px;
+    background: red;
+}
