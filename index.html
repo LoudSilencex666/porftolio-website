@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="./css/main.css">
         <link rel="stylesheet" href="./css/background.css">
         <link rel="stylesheet" href="./css/content-sections.css">
+        <link rel="stylesheet" href="./css/fake-scroll.css">
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -26,6 +27,7 @@
 
             <!-- starting view -->
             <section class="view">
+                1
                 <div class="social-media"></div>
                 <div class="into">
                     <div class="photo">
@@ -45,36 +47,54 @@
 
             <!-- about me -->
             <section class="view">
-
+                2
             </section>
 
             <!-- technology -->
             <section class="view">
-
+                3
             </section>
 
             <!-- technology -->
             <section class="view">
-
+                4
             </section>
 
             <!-- technology -->
             <section class="view">
-
+                5
             </section>
 
             <!-- technology -->
             <section class="view">
+                6
+            </section>
 
+            <!-- technology -->
+            <section class="view">
+                7
             </section>
 
             <!-- last view -->
             <section class="view">
-
+                8
             </section>
 
         </div>
         
-        <script src="./js/main.js" async defer></script>
+        <div class="fake-scroll-container">
+            <!-- fake-scroll -->
+
+            <div class="fake-scroll"></div>
+        </div>
+
+        <script src="./js/main.js"></script>
+        <script src="./js/fakeScroll.js"></script>
+        <script>
+            function initialization() {
+                fakeScroll();
+            }
+            initialization();
+        </script>
     </body>
 </html>

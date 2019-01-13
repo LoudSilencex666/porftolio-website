@@ -1,12 +1,17 @@
 .content-container {
+    position: relative;
+    height: 100%;
     z-index: 1;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: flex-start;
+    transition-duration: 1s;
 }
 
 .view {
     height: 100%;
-    min-width: 300px;
-    background: red;
+    min-width: 100%;
+    background: black;
+    color: white;
+    font-size: 40px;
 }
