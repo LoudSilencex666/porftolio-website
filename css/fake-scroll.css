@@ -1,6 +1,6 @@
 .fake-scroll-container {
     position: absolute;
-    width: 10px;
+    width: 6px;
     height: 100vh;
     top: 0;
     right: 0;
@@ -10,7 +10,7 @@
 
 .fake-scroll-container > .fake-scroll {
     position: absolute;
-    width: 10px;
+    width: 6px;
     height: 12.5%;
     top: 0;
     right: 0;
