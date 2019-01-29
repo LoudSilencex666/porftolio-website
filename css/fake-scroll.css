@@ -5,7 +5,8 @@
     top: 0;
     right: 0;
     z-index: 998;
-    background: rgba(204, 107, 9, 0.5);
+    /* background: rgba(204, 107, 9, 0.5); */
+    background: rgba(42, 77, 145, 0.5);
 }
 
 .fake-scroll-container > .fake-scroll {
@@ -15,6 +16,7 @@
     top: 0;
     right: 0;
     z-index: 999;
-    background: rgba(204, 107, 9, 1);
+    /* background: rgba(204, 107, 9, 1); */
+    background: rgba(42, 77, 145, 1);
     transition-duration: 1s;
 }
