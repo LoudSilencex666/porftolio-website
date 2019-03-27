@@ -23,7 +23,8 @@ const canvasBA = {
 }
 
 class Tile {
-    constructor(width, height, x, y, src) {
+    constructor(id, width, height, x, y, src) {
+        this.id = id;
         this.image = new Image();
         this.image.src = src;
         this.isLoaded = false;
@@ -33,28 +34,29 @@ class Tile {
         this.y = y;
     }
 
-    test() {
-        console.log(this.image);
+    draw() {
+        if(this.id % 2 === 0) {
+            canvasBA.ctx.drawImage(this.image, -this.width / 2 + (this.x * this.width * 0.73), -this.height / 2 + (this.y * this.height));
+        } else {
+            canvasBA.ctx.drawImage(this.image, -this.width / 2 + (this.x * this.width * 0.73), 0 + (this.y * this.height));
+        }
+    }
+
+    animate() {
+        
     }
     
 }
 
-const tiles = [];
-const tilesImageSrc = './assets/background_animation/tile7.png';
+const   tiles = [],
+        tilesImageSrc = './assets/background_animation/tile7.png',
+        tileW = 55, //159
+        tileH = 46; // 137
 
-let canvasBARAF;
-
-let tile = new Image();
-let tileLoaded = false;
-// let tileW = 159;
-// let tileH = 137;
-let tileW = 55;
-let tileH = 46;
-let tileRows = 0;
-let tileColumns = 0;
-
-tile.onload = () => { tileLoaded = true;};
-tile.src = './assets/background_animation/tile7.png';
+let     canvasBARAF,
+        tileRows = 0,
+        tileColumns = 0;
+        tilesCounter = 0;
 
 function getMousePos(evt) {
     return {
@@ -64,7 +66,6 @@ function getMousePos(evt) {
 }
 
 function canvasVars() {
-    tiles[0] = new Tile(55, 46, 0, 0);
     canvasBA.animationIncrement = 1;
     canvasBA.animationOpacity = 1;
 };
@@ -72,8 +73,17 @@ function canvasVars() {
 function canvasSizing() {
     canvasBA.eleDOM.width = document.body.clientWidth;
     canvasBA.eleDOM.height = document.body.clientHeight;
-    tileRows = Math.ceil(canvasBA.eleDOM.width / tileW);
+    tileRows = 2 * Math.ceil(canvasBA.eleDOM.width / tileW);
     tileColumns = Math.ceil(canvasBA.eleDOM.height / tileH) + 1;
+
+    for (let i = 0; i < tileColumns; i++) {
+        for (let j = 0; j < tileRows; j++) {
+            tiles[tilesCounter] = new Tile(tilesCounter, tileW, tileH, j, i, tilesImageSrc);
+            tilesCounter++
+        }
+    }
+
+    tilesCounter = 0;
 };
 
 function canvasMouseMovement() {
@@ -116,7 +126,6 @@ function canvasMouseEffect() {
             canvasBA.animationIncrement += 15; // param velocity of spreading
         } else if (canvasBA.animationOpacity > 0) {
             canvasBA.animationOpacity -= 0.07;
-            console.log(canvasBA.animationOpacity);
         } else {
             canvasBA.animationOpacity = 1;
             canvasBA.animationIncrement = 0;
@@ -128,7 +137,7 @@ function canvasMouseEffect() {
         // canvasBA.ctx.fillStyle = 'rgba(0, 0, 111, 1)';
 
         canvasBA.ctx.fill();
-        tiles[0].test();
+        console.log(tiles.length);
 
     }
 
@@ -138,23 +147,10 @@ function canvasMouseEffect() {
 }
 
 function canvasTiles() {
-    if(tileLoaded) {
-        for (let i = 0; i < tileColumns; i++) {
-            for (let j = 0; j < tileRows; j++) {
-                canvasBA.ctx.drawImage(tile, -tileW / 2 + (1.5*j * tileW), -tileH / 2 + (i * tileH));
-            }
-        }
-
-        for (let i = 0; i < tileColumns; i++) {
-            for (let j = 0; j < tileRows; j++) {
-                canvasBA.ctx.drawImage(tile, tileW / 4 + (1.5*j * tileW), 0 + (i * tileH));
-            }
-        }
-
+    for (let i = 0; i < tiles.length; i++) {
+        tiles[i].draw();
     }
-    // if(tileLoaded) {
-    //     canvasBA.ctx.drawImage(tile, 0, 0, canvasBA.w, canvasBA.h);
-    // }
+
 }
 
 
