@@ -23,27 +23,63 @@ const canvasBA = {
 }
 
 class Tile {
-    constructor(id, width, height, x, y, src) {
+    constructor(id, width, height, row, column, src) {
         this.id = id;
         this.image = new Image();
         this.image.src = src;
         this.isLoaded = false;
         this.width = width;
         this.height = height;
-        this.x = x;
-        this.y = y;
+        this.row = row;
+        this.column = column;
+        this.rowMaxRange = row;
+        this.animationStates = {
+            isRisingDone : false,
+            isFallingDone : false,
+            isAnimationDone : true
+        }
     }
 
     draw() {
         if(this.id % 2 === 0) {
-            canvasBA.ctx.drawImage(this.image, -this.width / 2 + (this.x * this.width * 0.73), -this.height / 2 + (this.y * this.height));
+            canvasBA.ctx.drawImage(this.image, -this.width / 2 + (this.column * this.width * 0.73), -this.height / 2 + (this.row * this.height));
         } else {
-            canvasBA.ctx.drawImage(this.image, -this.width / 2 + (this.x * this.width * 0.73), 0 + (this.y * this.height));
+            canvasBA.ctx.drawImage(this.image, -this.width / 2 + (this.column * this.width * 0.73), 0 + (this.row * this.height));
         }
     }
 
     animate() {
+        if (!this.animationStates.isAnimationDone) {
         
+            if (!this.animationStates.isRisingDone) {
+                
+                if (this.row > this.rowMaxRange - 0.2) {
+                    this.row -= 0.01;
+                } else {
+                    this.animationStates.isRisingDone = true;
+                }
+            }
+
+            if (!this.animationStates.isFallingDone && this.animationStates.isRisingDone) {
+                if (this.row < this.rowMaxRange + 0.2) {
+                    this.row += 0.01;
+                } else {
+                    this.animationStates.isFallingDone = true;
+                }
+            }
+
+            if (this.animationStates.isRisingDone && this.animationStates.isFallingDone) {
+                if (this.row > this.rowMaxRange) {
+                    this.row -= 0.01;
+                } else {
+                    this.animationStates.isAnimationDone = true;
+                    this.animationStates.isRisingDone = false;
+                    this.animationStates.isFallingDone = false;
+                }
+            }
+
+        }   
+
     }
     
 }
@@ -73,18 +109,34 @@ function canvasVars() {
 function canvasSizing() {
     canvasBA.eleDOM.width = document.body.clientWidth;
     canvasBA.eleDOM.height = document.body.clientHeight;
-    tileRows = 2 * Math.ceil(canvasBA.eleDOM.width / tileW);
-    tileColumns = Math.ceil(canvasBA.eleDOM.height / tileH) + 1;
+    tileColumns = 2 * Math.ceil(canvasBA.eleDOM.width / tileW);
+    tileRows = Math.ceil(canvasBA.eleDOM.height / tileH) + 1;
 
-    for (let i = 0; i < tileColumns; i++) {
-        for (let j = 0; j < tileRows; j++) {
-            tiles[tilesCounter] = new Tile(tilesCounter, tileW, tileH, j, i, tilesImageSrc);
+    for (let i = 0; i < tileRows; i++) {
+        for (let j = 0; j < tileColumns; j++) {
+            tiles[tilesCounter] = new Tile(tilesCounter, tileW, tileH, i, j, tilesImageSrc);
             tilesCounter++
         }
     }
 
     tilesCounter = 0;
 };
+
+function canvasAnimationInterval() {
+    console.log(tiles.length,tileRows, tileColumns, tiles[0].row, tiles[0].column);
+    // ANIMATION MOD 1
+    for (let i = 0; i < tileColumns; i++) {
+
+        for (let j = i; j < tiles.length; j += tileColumns) {
+            setTimeout(()=> {
+                tiles[j].animationStates.isAnimationDone = false;
+            }, i * 100);
+        }
+        console.log(i);
+    }
+
+    setTimeout(canvasAnimationInterval, 7000)
+}
 
 function canvasMouseMovement() {
     document.body.addEventListener('mousemove', (evt) => {
@@ -137,8 +189,7 @@ function canvasMouseEffect() {
         // canvasBA.ctx.fillStyle = 'rgba(0, 0, 111, 1)';
 
         canvasBA.ctx.fill();
-        console.log(tiles.length);
-
+        
     }
 
     if(canvasBA.isDone) {
@@ -149,7 +200,13 @@ function canvasMouseEffect() {
 function canvasTiles() {
     for (let i = 0; i < tiles.length; i++) {
         tiles[i].draw();
+        tiles[i].animate();
     }
+
+
+    // for (let i = 0; i < tiles.length; i++) {
+    //     tiles[i].draw();
+    // }
 
 }
 
@@ -159,6 +216,7 @@ function canvasTiles() {
 function canvasBAInit() {
     canvasVars();
     canvasSizing();
+    canvasAnimationInterval();
     canvasMouseMovement();
     canvasBAUpdate();
 }
