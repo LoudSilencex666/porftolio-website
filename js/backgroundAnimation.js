@@ -85,44 +85,6 @@ class Tile {
         }   
 
     }
-
-    animateMovement2() {
-        if (!this.animationStates.isAnimationDone) {
-        
-            if (!this.animationStates.isRisingDone) {
-                
-                if (this.width < this.animationStates.widthMaxRange + 2 * this.animationStates.widthMaxRange &&
-                    this.height < this.animationStates.heightMaxRange + 2 * this.animationStates.heightMaxRange) {
-                    this.width += 1;
-                    this.height += 1;
-                } else {
-                    this.animationStates.isRisingDone = true;
-                }
-            }
-
-            if (!this.animationStates.isFallingDone && this.animationStates.isRisingDone) {
-                if (this.width > this.animationStates.widthMaxRange - 2 * this.animationStates.widthMaxRange &&
-                    this.height > this.animationStates.heightMaxRange - 2 * this.animationStates.heightMaxRange) {
-                    this.width -= 1;
-                    this.height -= 1;
-                } else {
-                    this.animationStates.isFallingDone = true;
-                }
-            }
-
-            if (this.animationStates.isRisingDone && this.animationStates.isFallingDone) {
-                if (this.width < this.animationStates.widthMaxRange && this.animationStates.heightMaxRange) {
-                    this.width += 1;
-                    this.height += 1;
-                } else {
-                    this.animationStates.isAnimationDone = true;
-                    this.animationStates.isRisingDone = false;
-                    this.animationStates.isFallingDone = false;
-                }
-            }
-
-        }  
-    }
     
 }
 
@@ -172,17 +134,10 @@ function canvasAnimationInterval() {
         for (let j = i; j < tiles.length; j += tileColumns) {
             setTimeout(()=> {
                 tiles[j].animationStates.isAnimationDone = false;
-            }, 100);
+            }, i + 100);
         }
         console.log(i);
     }
-
-    // // ANIMATION MOD 2
-    // let j = Math.floor(Math.random() * tiles.length);
-
-    // setTimeout(()=> {
-    //     tiles[j].animationStates.isAnimationDone = false;
-    // }, 100);
 
     setTimeout(canvasAnimationInterval, 6000)
 }
