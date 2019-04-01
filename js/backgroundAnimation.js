@@ -28,6 +28,8 @@ class Tile {
         this.image = new Image();
         this.image.src = src;
         this.isLoaded = false;
+        this.staticWidth = width;
+        this.staticHeight = height;
         this.width = width;
         this.height = height;
         this.row = row;
@@ -36,19 +38,21 @@ class Tile {
         this.animationStates = {
             isRisingDone : false,
             isFallingDone : false,
-            isAnimationDone : true
+            isAnimationDone : true,
+            heightMaxRange : this.height,
+            widthMaxRange : this.width
         }
     }
 
-    draw() {
+    drawTiles() {
         if(this.id % 2 === 0) {
-            canvasBA.ctx.drawImage(this.image, -this.width / 2 + (this.column * this.width * 0.73), -this.height / 2 + (this.row * this.height));
+            canvasBA.ctx.drawImage(this.image, -this.staticWidth / 2 + (this.column * this.staticWidth * 0.73), -this.staticHeight / 2 + (this.row * this.staticHeight), this.width, this.height);
         } else {
-            canvasBA.ctx.drawImage(this.image, -this.width / 2 + (this.column * this.width * 0.73), 0 + (this.row * this.height));
+            canvasBA.ctx.drawImage(this.image, -this.staticWidth / 2 + (this.column * this.staticWidth * 0.73), 0 + (this.row * this.staticHeight), this.width, this.height);
         }
     }
 
-    animate() {
+    animateMovement() {
         if (!this.animationStates.isAnimationDone) {
         
             if (!this.animationStates.isRisingDone) {
@@ -80,6 +84,44 @@ class Tile {
 
         }   
 
+    }
+
+    animateMovement2() {
+        if (!this.animationStates.isAnimationDone) {
+        
+            if (!this.animationStates.isRisingDone) {
+                
+                if (this.width < this.animationStates.widthMaxRange + 2 * this.animationStates.widthMaxRange &&
+                    this.height < this.animationStates.heightMaxRange + 2 * this.animationStates.heightMaxRange) {
+                    this.width += 1;
+                    this.height += 1;
+                } else {
+                    this.animationStates.isRisingDone = true;
+                }
+            }
+
+            if (!this.animationStates.isFallingDone && this.animationStates.isRisingDone) {
+                if (this.width > this.animationStates.widthMaxRange - 2 * this.animationStates.widthMaxRange &&
+                    this.height > this.animationStates.heightMaxRange - 2 * this.animationStates.heightMaxRange) {
+                    this.width -= 1;
+                    this.height -= 1;
+                } else {
+                    this.animationStates.isFallingDone = true;
+                }
+            }
+
+            if (this.animationStates.isRisingDone && this.animationStates.isFallingDone) {
+                if (this.width < this.animationStates.widthMaxRange && this.animationStates.heightMaxRange) {
+                    this.width += 1;
+                    this.height += 1;
+                } else {
+                    this.animationStates.isAnimationDone = true;
+                    this.animationStates.isRisingDone = false;
+                    this.animationStates.isFallingDone = false;
+                }
+            }
+
+        }  
     }
     
 }
@@ -123,19 +165,26 @@ function canvasSizing() {
 };
 
 function canvasAnimationInterval() {
-    console.log(tiles.length,tileRows, tileColumns, tiles[0].row, tiles[0].column);
+    console.log(tiles[0].animationStates.heightMaxRange * 0.1, tiles[0].animationStates.heightMaxRange, tiles[0].height);
     // ANIMATION MOD 1
-    for (let i = 0; i < tileColumns; i++) {
+    for (let i = 0; i < 2; i++) {
 
         for (let j = i; j < tiles.length; j += tileColumns) {
             setTimeout(()=> {
                 tiles[j].animationStates.isAnimationDone = false;
-            }, i * 100);
+            }, 100);
         }
         console.log(i);
     }
 
-    setTimeout(canvasAnimationInterval, 7000)
+    // // ANIMATION MOD 2
+    // let j = Math.floor(Math.random() * tiles.length);
+
+    // setTimeout(()=> {
+    //     tiles[j].animationStates.isAnimationDone = false;
+    // }, 100);
+
+    setTimeout(canvasAnimationInterval, 6000)
 }
 
 function canvasMouseMovement() {
@@ -157,7 +206,7 @@ function canvasMouseMovement() {
 }
 
 function canvasBG() {
-    canvasBA.ctx.fillStyle = 'rgb(22, 22, 22)';
+    canvasBA.ctx.fillStyle = 'rgb(44, 44, 44)';
     canvasBA.ctx.fillRect(0, 0, canvasBA.w, canvasBA.h);
 }
 
@@ -199,8 +248,8 @@ function canvasMouseEffect() {
 
 function canvasTiles() {
     for (let i = 0; i < tiles.length; i++) {
-        tiles[i].draw();
-        tiles[i].animate();
+        tiles[i].drawTiles();
+        tiles[i].animateMovement();
     }
 
 
