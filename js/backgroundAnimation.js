@@ -4,10 +4,17 @@ const canvasBA = {
     mx : null,
     my : null,
     clicked : null,
-    isDone : null,
-    animationIncrement : null,
-    animationOpacity : null,
+    bombsAnimation : {
+        isDone : true,
+        animationIncrement : null,
+        animationOpacity : null,
+        countdownToDrop : null,
+        detonationX : null,
+        detonationY : null,
+        bombColor : null,
 
+    },
+    
     get rect() {
         return this.eleDOM.getBoundingClientRect();
     },
@@ -28,57 +35,56 @@ class Tile {
         this.image = new Image();
         this.image.src = src;
         this.isLoaded = false;
-        this.staticWidth = width;
-        this.staticHeight = height;
+        this.staticWidth = width; // may be useful in other animation mods
+        this.staticHeight = height; // may be useful in other animation mods
         this.width = width;
         this.height = height;
         this.row = row;
         this.column = column;
-        this.rowMaxRange = row;
-        this.animationStates = {
+        this.animationVars = {
             isRisingDone : false,
             isFallingDone : false,
             isAnimationDone : true,
-            heightMaxRange : this.height,
-            widthMaxRange : this.width
+            rowMaxRange : this.row,
+            randomPropabilityNumber : Math.floor(Math.random() * 5)
         }
     }
 
     drawTiles() {
-        if(this.id % 2 === 0) {
-            canvasBA.ctx.drawImage(this.image, -this.staticWidth / 2 + (this.column * this.staticWidth * 0.73), -this.staticHeight / 2 + (this.row * this.staticHeight), this.width, this.height);
-        } else {
-            canvasBA.ctx.drawImage(this.image, -this.staticWidth / 2 + (this.column * this.staticWidth * 0.73), 0 + (this.row * this.staticHeight), this.width, this.height);
+        if(this.id % 2 === 0 && this.animationVars.randomPropabilityNumber !== 0) {
+            canvasBA.ctx.drawImage(this.image, -this.staticWidth / 2 + (this.column * this.staticWidth * 0.73), -this.staticHeight / 2 + (this.row * this.staticHeight));
+        } else if(this.animationVars.randomPropabilityNumber !== 0) {
+            canvasBA.ctx.drawImage(this.image, -this.staticWidth / 2 + (this.column * this.staticWidth * 0.73), 0 + (this.row * this.staticHeight));
         }
     }
 
     animateMovement() {
-        if (!this.animationStates.isAnimationDone) {
+        if (!this.animationVars.isAnimationDone) {
         
-            if (!this.animationStates.isRisingDone) {
+            if (!this.animationVars.isRisingDone) {
                 
-                if (this.row > this.rowMaxRange - 0.2) {
+                if (this.row > this.animationVars.rowMaxRange - 0.2) {
                     this.row -= 0.01;
                 } else {
-                    this.animationStates.isRisingDone = true;
+                    this.animationVars.isRisingDone = true;
                 }
             }
 
-            if (!this.animationStates.isFallingDone && this.animationStates.isRisingDone) {
-                if (this.row < this.rowMaxRange + 0.2) {
+            if (!this.animationVars.isFallingDone && this.animationVars.isRisingDone) {
+                if (this.row < this.animationVars.rowMaxRange + 0.2) {
                     this.row += 0.01;
                 } else {
-                    this.animationStates.isFallingDone = true;
+                    this.animationVars.isFallingDone = true;
                 }
             }
 
-            if (this.animationStates.isRisingDone && this.animationStates.isFallingDone) {
-                if (this.row > this.rowMaxRange) {
+            if (this.animationVars.isRisingDone && this.animationVars.isFallingDone) {
+                if (this.row > this.animationVars.rowMaxRange) {
                     this.row -= 0.01;
                 } else {
-                    this.animationStates.isAnimationDone = true;
-                    this.animationStates.isRisingDone = false;
-                    this.animationStates.isFallingDone = false;
+                    this.animationVars.isAnimationDone = true;
+                    this.animationVars.isRisingDone = false;
+                    this.animationVars.isFallingDone = false;
                 }
             }
 
@@ -127,19 +133,19 @@ function canvasSizing() {
 };
 
 function canvasAnimationInterval() {
-    console.log(tiles[0].animationStates.heightMaxRange * 0.1, tiles[0].animationStates.heightMaxRange, tiles[0].height);
+    console.log('animation mod 1 with bombs');
     // ANIMATION MOD 1
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < tileColumns; i++) {
 
         for (let j = i; j < tiles.length; j += tileColumns) {
             setTimeout(()=> {
-                tiles[j].animationStates.isAnimationDone = false;
-            }, i + 100);
+                tiles[j].animationVars.isAnimationDone = false;
+            }, i * 100);
         }
-        console.log(i);
+
+        
     }
 
-    setTimeout(canvasAnimationInterval, 6000)
 }
 
 function canvasMouseMovement() {
@@ -150,7 +156,7 @@ function canvasMouseMovement() {
     }, false);
 
     document.body.addEventListener('click', (evt) => {
-        canvasBA.isDone = false;
+        // canvasBA.bombsAnimation.isDone = false;
         canvasBA.clicked = true;
 
     }, false);
@@ -161,50 +167,95 @@ function canvasMouseMovement() {
 }
 
 function canvasBG() {
-    canvasBA.ctx.fillStyle = 'rgb(44, 44, 44)';
+    canvasBA.ctx.fillStyle = 'rgb(33, 33, 33)';
     canvasBA.ctx.fillRect(0, 0, canvasBA.w, canvasBA.h);
 }
 
-function canvasMouseEffect() {
-    if(canvasBA.clicked) {
+//atomic bomb after LMB click
+// function canvasMouseEffect() { 
+//     if(canvasBA.clicked) {
+//         canvasBA.ctx.beginPath();
+//         canvasBA.ctx.arc(canvasBA.mx, canvasBA.my, canvasBA.animationIncrement, 0, 2 * Math.PI, false);
+        
+//         // create radial gradient
+//         var grd = canvasBA.ctx.createRadialGradient(canvasBA.mx, canvasBA.my, 10, canvasBA.mx, canvasBA.my, canvasBA.animationIncrement);
+
+//         grd.addColorStop(0, `rgba(8, 146, 208, ${canvasBA.animationOpacity})`);
+
+//         grd.addColorStop(1, `rgba(22, 22, 22, ${canvasBA.animationOpacity})`);
+
+        
+//         if (canvasBA.animationIncrement <= 1000) { // param max spread
+//             canvasBA.animationIncrement += 7; // param velocity of spreading
+//         } else if (canvasBA.animationOpacity > 0) {
+//             canvasBA.animationOpacity -= 0.07;
+//         } else {
+//             canvasBA.animationOpacity = 1;
+//             canvasBA.animationIncrement = 0;
+//             canvasBA.isDone = true;
+//         }
+
+//         canvasBA.ctx.fillStyle = grd;
+
+//         // canvasBA.ctx.fillStyle = 'rgba(0, 0, 111, 1)';
+
+//         canvasBA.ctx.fill();
+        
+//     }
+
+//     if(canvasBA.isDone) {
+//         canvasBA.clicked = false;
+//     }
+// }
+
+function canvasBombs() {
+
+    if(canvasBA.bombsAnimation.isDone && canvasBA.bombsAnimation.countdownToDrop <= 0) {
+        canvasBA.bombsAnimation.countdownToDrop = Math.floor(Math.random() * 1) + 2;
+        canvasBA.bombsAnimation.detonationX = Math.floor(Math.random() * canvasBA.w);
+        canvasBA.bombsAnimation.detonationY = Math.floor(Math.random() * canvasBA.h);
+        canvasBA.bombsAnimation.bombColor = `${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}`;
+        canvasBA.bombsAnimation.isDone = false;
+    }
+    
+    if(canvasBA.bombsAnimation.countdownToDrop > 0) {
+        canvasBA.bombsAnimation.countdownToDrop -= 0.01667;
+    }
+
+    if(canvasBA.bombsAnimation.countdownToDrop <= 0) {
         canvasBA.ctx.beginPath();
-        canvasBA.ctx.arc(canvasBA.mx, canvasBA.my, canvasBA.animationIncrement, 0, 2 * Math.PI, false);
+        canvasBA.ctx.arc(canvasBA.bombsAnimation.detonationX, canvasBA.bombsAnimation.detonationY, canvasBA.animationIncrement, 0, 2 * Math.PI, false);
         
         // create radial gradient
-        var grd = canvasBA.ctx.createRadialGradient(canvasBA.mx, canvasBA.my, 10, canvasBA.mx, canvasBA.my, canvasBA.animationIncrement);
+        var grd = canvasBA.ctx.createRadialGradient(canvasBA.bombsAnimation.detonationX, canvasBA.bombsAnimation.detonationY, 10, canvasBA.bombsAnimation.detonationX, canvasBA.bombsAnimation.detonationY, canvasBA.animationIncrement);
 
-        grd.addColorStop(0, `rgba(8, 146, 208, ${canvasBA.animationOpacity})`);
+        grd.addColorStop(0, `rgba(${canvasBA.bombsAnimation.bombColor}, ${canvasBA.animationOpacity})`);
 
         grd.addColorStop(1, `rgba(22, 22, 22, ${canvasBA.animationOpacity})`);
 
         
-        if (canvasBA.animationIncrement <= 200) { // param max spread
-            canvasBA.animationIncrement += 15; // param velocity of spreading
+        if (canvasBA.animationIncrement <= 800) { // param max spread
+            canvasBA.animationIncrement += 7; // param velocity of spreading
         } else if (canvasBA.animationOpacity > 0) {
             canvasBA.animationOpacity -= 0.07;
         } else {
             canvasBA.animationOpacity = 1;
             canvasBA.animationIncrement = 0;
-            canvasBA.isDone = true;
+            canvasBA.bombsAnimation.isDone = true;
         }
 
         canvasBA.ctx.fillStyle = grd;
-
-        // canvasBA.ctx.fillStyle = 'rgba(0, 0, 111, 1)';
 
         canvasBA.ctx.fill();
         
     }
 
-    if(canvasBA.isDone) {
-        canvasBA.clicked = false;
-    }
 }
 
 function canvasTiles() {
     for (let i = 0; i < tiles.length; i++) {
         tiles[i].drawTiles();
-        tiles[i].animateMovement();
+        //tiles[i].animateMovement();
     }
 
 
@@ -227,7 +278,7 @@ function canvasBAInit() {
 
 function canvasBAUpdate() {
     canvasBG();
-    canvasMouseEffect();
+    canvasBombs();
     canvasTiles();
     canvasBARAF = window.requestAnimationFrame(canvasBAUpdate);
 }
