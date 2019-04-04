@@ -6,13 +6,14 @@ const canvasBA = {
     clicked : null,
     bombsAnimation : {
         isDone : true,
-        animationIncrement : null,
-        animationOpacity : null,
+        animationIncrement : 0,
+        animationOpacity : 1,
         countdownToDrop : null,
         detonationX : null,
         detonationY : null,
         bombColor : null,
-
+        isDropped : null,
+        dropVelocity : 0
     },
     
     get rect() {
@@ -46,7 +47,7 @@ class Tile {
             isFallingDone : false,
             isAnimationDone : true,
             rowMaxRange : this.row,
-            randomPropabilityNumber : Math.floor(Math.random() * 5)
+            randomPropabilityNumber : Math.floor(Math.random() * 7)
         }
     }
 
@@ -171,7 +172,8 @@ function canvasBG() {
     canvasBA.ctx.fillRect(0, 0, canvasBA.w, canvasBA.h);
 }
 
-//atomic bomb after LMB click
+/* atomic bomb after LMB click */
+
 // function canvasMouseEffect() { 
 //     if(canvasBA.clicked) {
 //         canvasBA.ctx.beginPath();
@@ -208,14 +210,14 @@ function canvasBG() {
 //     }
 // }
 
-function canvasBombs() {
-
+function canvasBombsDrop() {
     if(canvasBA.bombsAnimation.isDone && canvasBA.bombsAnimation.countdownToDrop <= 0) {
         canvasBA.bombsAnimation.countdownToDrop = Math.floor(Math.random() * 1) + 2;
         canvasBA.bombsAnimation.detonationX = Math.floor(Math.random() * canvasBA.w);
         canvasBA.bombsAnimation.detonationY = Math.floor(Math.random() * canvasBA.h);
         canvasBA.bombsAnimation.bombColor = `${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}`;
         canvasBA.bombsAnimation.isDone = false;
+        canvasBA.bombsAnimation.isDropped = false;
     }
     
     if(canvasBA.bombsAnimation.countdownToDrop > 0) {
@@ -223,25 +225,52 @@ function canvasBombs() {
     }
 
     if(canvasBA.bombsAnimation.countdownToDrop <= 0) {
+        canvasBA.bombsAnimation.isDropped = true;
+    }
+
+    /* bomb drop animation */
+
+    // if(canvasBA.bombsAnimation.countdownToDrop <= 0 && !canvasBA.bombsAnimation.isDropped) {
+        
+    //     canvasBA.bombsAnimation.dropVelocity += 1;
+
+    //     canvasBA.ctx.beginPath();
+    //     canvasBA.ctx.moveTo(canvasBA.bombsAnimation.detonationX, canvasBA.bombsAnimation.detonationY + 100);
+    //     canvasBA.ctx.lineTo(canvasBA.bombsAnimation.detonationX, canvasBA.bombsAnimation.detonationY + 100 - canvasBA.bombsAnimation.dropVelocity);
+    //     canvasBA.ctx.strokeStyle = '#FFF';
+    //     canvasBA.ctx.stroke();
+
+    //     if(canvasBA.bombsAnimation.dropVelocity > 100) {
+    //         canvasBA.bombsAnimation.isDropped = true;
+    //         canvasBA.bombsAnimation.dropVelocity = 0;
+    //     }
+    // }
+}
+
+function canvasBombsExplosion() {
+
+
+    if(canvasBA.bombsAnimation.isDropped) {
         canvasBA.ctx.beginPath();
-        canvasBA.ctx.arc(canvasBA.bombsAnimation.detonationX, canvasBA.bombsAnimation.detonationY, canvasBA.animationIncrement, 0, 2 * Math.PI, false);
+        canvasBA.ctx.arc(canvasBA.bombsAnimation.detonationX, canvasBA.bombsAnimation.detonationY, canvasBA.bombsAnimation.animationIncrement, 0, 2 * Math.PI, false);
         
         // create radial gradient
-        var grd = canvasBA.ctx.createRadialGradient(canvasBA.bombsAnimation.detonationX, canvasBA.bombsAnimation.detonationY, 10, canvasBA.bombsAnimation.detonationX, canvasBA.bombsAnimation.detonationY, canvasBA.animationIncrement);
+        var grd = canvasBA.ctx.createRadialGradient(canvasBA.bombsAnimation.detonationX, canvasBA.bombsAnimation.detonationY, 10, canvasBA.bombsAnimation.detonationX, canvasBA.bombsAnimation.detonationY, canvasBA.bombsAnimation.animationIncrement);
 
-        grd.addColorStop(0, `rgba(${canvasBA.bombsAnimation.bombColor}, ${canvasBA.animationOpacity})`);
+        grd.addColorStop(0, `rgba(${canvasBA.bombsAnimation.bombColor}, ${canvasBA.bombsAnimation.animationOpacity})`);
 
-        grd.addColorStop(1, `rgba(22, 22, 22, ${canvasBA.animationOpacity})`);
+        grd.addColorStop(1, `rgba(22, 22, 22, ${canvasBA.bombsAnimation.animationOpacity})`);
 
         
-        if (canvasBA.animationIncrement <= 800) { // param max spread
-            canvasBA.animationIncrement += 7; // param velocity of spreading
-        } else if (canvasBA.animationOpacity > 0) {
-            canvasBA.animationOpacity -= 0.07;
+        if (canvasBA.bombsAnimation.animationIncrement <= 2000) { // param max spread
+            canvasBA.bombsAnimation.animationIncrement += 7; // param velocity of spreading
+        } else if (canvasBA.bombsAnimation.animationOpacity > 0) {
+            canvasBA.bombsAnimation.animationOpacity -= 0.01;
         } else {
-            canvasBA.animationOpacity = 1;
-            canvasBA.animationIncrement = 0;
+            canvasBA.bombsAnimation.animationOpacity = 1;
+            canvasBA.bombsAnimation.animationIncrement = 0;
             canvasBA.bombsAnimation.isDone = true;
+            canvasBA.bombsAnimation.isDropped = false;
         }
 
         canvasBA.ctx.fillStyle = grd;
@@ -278,7 +307,8 @@ function canvasBAInit() {
 
 function canvasBAUpdate() {
     canvasBG();
-    canvasBombs();
+    canvasBombsExplosion();
     canvasTiles();
+    canvasBombsDrop();
     canvasBARAF = window.requestAnimationFrame(canvasBAUpdate);
 }
