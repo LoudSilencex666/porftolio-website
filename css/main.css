@@ -1,3 +1,13 @@
+@font-face {
+    font-family:'ufo';
+    src: url('../assets/fonts/ufo.ttf') format('truetype');
+    
+
+    font-weight: normal;
+    font-style: normal;
+
+}
+
 * {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
