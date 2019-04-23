@@ -18,4 +18,5 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
+    background-color: rgba(0, 0, 0, 0.85);
 }

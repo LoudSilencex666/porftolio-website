@@ -1,0 +1,60 @@
+.skills {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.skills .title {
+    height: 10%;
+}
+
+.skills h1 {
+    width: 100%;
+}
+
+.skills .content {
+    display: flex;
+    justify-content: space-between;
+    height: 70%;
+    width: 100%;
+}
+
+.skills .icons {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-direction: column;
+    width: 20%;
+    height: 100%;
+}
+
+.skills .icons svg {
+    width: 128px;
+    height: 128px;
+}
+
+.skills .icons svg:nth-child(even) {
+    margin-right: 10%;
+}
+
+.skills .text {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-direction: column;
+    width: 75%;
+    height: 100%;
+}
+
+
+.skills .text p {
+    height: 128px;
+    width: 70%;
+}
+
+.skills .text p:nth-child(odd) {
+    margin-left: 5%;
+}
