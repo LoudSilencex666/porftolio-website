@@ -59,3 +59,9 @@
 .github-link a:hover {
     color: rgba(255, 255, 255, .9);
 }
+
+@media (max-height: 800px), (max-width: 1200) { 
+    .projects .experience, .projects .github {
+        width: 80%;
+    }
+}

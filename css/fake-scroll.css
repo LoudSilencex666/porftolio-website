@@ -12,7 +12,7 @@
 .fake-scroll-container > .fake-scroll {
     position: absolute;
     width: 6px;
-    height: 12.5%;
+    height: 20%;
     top: 0;
     right: 0;
     z-index: 999;

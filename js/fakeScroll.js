@@ -26,7 +26,6 @@ function fakeScroll() {
                 activeSection += 1 * turn;
             }
             
-            console.log(scrollPosition);
             moveFakeScroll(scrollPosition);
             changeSection(activeSection);
             

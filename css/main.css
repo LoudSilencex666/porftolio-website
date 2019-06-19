@@ -53,3 +53,15 @@ p {
 }
 
 /* #0d0d0d */
+
+@media (max-height: 999px), (max-width: 1440) { 
+    html, body {
+        font-size: 16px;
+    }
+}
+
+@media (max-height: 800px), (max-width: 1200) { 
+    html, body {
+        font-size: 16px;
+    }
+}
