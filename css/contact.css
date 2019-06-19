@@ -1,0 +1,27 @@
+.contact {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.contact .title {
+    height: 10%;
+}
+
+.contact h1 {
+    width: 100%;
+}
+
+.contact .content {
+    height: 60%;
+    width: 70%;
+}
+
+.contact .content span {
+    font-family: 'Quicksand', serif;
+    font-size: 1.4rem;
+    color: rgba(255, 255, 255, .9);
+}

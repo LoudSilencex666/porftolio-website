@@ -15,21 +15,18 @@ function fakeScroll() {
                 turn = -1;
             }
 
-            console.log(turn);
-
-            
-
             if (scrollPosition == 0 && turn == -1) {
                 scrollPosition = scrollPosition;
                 activeSection = activeSection;
-            } else if ( scrollPosition == 87.5 && turn == 1) {
+            } else if ( scrollPosition == 100/5*4 && turn == 1) {
                 scrollPosition = scrollPosition;
                 activeSection = activeSection;
             } else {
-                scrollPosition += 12.5 * turn;
+                scrollPosition += 100/5 * turn;
                 activeSection += 1 * turn;
             }
-
+            
+            console.log(scrollPosition);
             moveFakeScroll(scrollPosition);
             changeSection(activeSection);
             

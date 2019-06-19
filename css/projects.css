@@ -1,0 +1,61 @@
+.projects {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.projects .title {
+    height: 10%;
+}
+
+.projects h1 {
+    width: 100%;
+}
+
+.projects .experience {
+    height: 35%;
+    width: 60%;
+}
+
+.projects .github {
+    height: 30%;
+    width: 60%;
+}
+
+.github-link {
+    height: 60px;
+}
+
+.github-link a {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Quicksand', serif;
+    font-size: .8rem;
+    transition-duration: 1s;
+    color: rgba(255, 255, 255, .5);
+    text-transform: uppercase;
+    text-decoration: none;
+    text-decoration-line: none;
+}
+
+.github-link a div {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 20px;
+}
+
+.github-link a img {
+    object-fit: contain;
+    height: 100%;
+}
+
+.github-link a:hover {
+    color: rgba(255, 255, 255, .9);
+}
