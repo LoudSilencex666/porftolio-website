@@ -1,7 +1,7 @@
 .content-container {
     position: relative;
     left: 0;
-    height: 100%;
+    min-height: 100%;
     z-index: 1;
     display: flex;
     justify-content: flex-start;
@@ -12,6 +12,7 @@
 .view {
     height: 100%;
     min-width: 100%;
+    max-width: 100%;
     color: white;
     font-size: 40px;
     display: flex;
@@ -19,4 +20,17 @@
     justify-content: space-between;
     align-items: flex-start;
     background-color: rgba(0, 0, 0, 0.85);
+}
+
+
+@media (max-width: 768px) { 
+    .content-container {
+        flex-direction: column;
+        
+    }
+
+    .view {
+        min-height: 100vh;
+        height: auto;
+    }
 }

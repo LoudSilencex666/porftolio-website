@@ -65,3 +65,31 @@
         width: 80%;
     }
 }
+
+@media (max-width: 768px) { 
+    .projects {
+        height: auto;
+    }    
+
+    .projects .title {
+        width: 90%;
+        height: auto;
+        padding-top: 30px;
+    }
+
+    .projects .experience {
+        height: auto;
+        width: 90%;
+        padding-bottom: 40px;
+    }
+
+    .projects .github {
+        height: auto;
+        width: 90%;
+    }
+
+    .github-link {
+        height: 60px;
+        padding-bottom: 50px;
+    }
+}

@@ -72,3 +72,49 @@
     cursor: pointer;
     color: purple;
 }
+
+
+@media (max-width: 768px) { 
+    .gg .title {
+        width: 90%;
+        height: auto;
+        justify-content: flex-start;
+    }
+
+    .gg .title h1 {
+        padding-top: 20px;
+        padding-bottom: 20px;
+        font-size: 2rem;
+    }
+
+    .gg .review {
+        display: flex;
+        flex-direction: column;
+        width: 90%;
+        height: auto;
+    }
+
+    .gg .img  {
+        width: 100%;
+    }
+    
+    .gg .img p {
+        padding-top: 10px;
+        padding-bottom: 30px;
+    }
+    .gg .text {
+        width: 90%;
+        height: auto;
+        padding: 0;
+    }
+    
+    .gg .text .github {
+        width: 90%;
+        padding-top: 40px;
+        padding-bottom: 50px;
+    }
+
+    .gg .text .github a {
+        font-size: 1.6rem;
+    }
+}

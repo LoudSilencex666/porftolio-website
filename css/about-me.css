@@ -23,3 +23,20 @@
 .about-me p {
 
 }
+
+@media (max-width: 768px) { 
+    .about-me {
+        justify-content: flex-start;
+    }
+
+    .about-me h1 {
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .about-me .content {
+        width: 90%;
+        height: 100%;
+        font-size: 1.4rem;
+    }
+}

@@ -70,3 +70,50 @@
         height: 100px;
     }
 }
+
+@media (max-width: 768px) { 
+    .skills {
+        height: auto;
+        justify-content: flex-start;
+    }
+
+    .skills .title {
+        padding-top: 20px;
+        padding-bottom: 20px;
+        width: 90%;
+        height: auto;
+    }
+
+    .skills .content {
+        height: auto;
+        width: 90%;
+    }
+
+    .skills .skill {
+        height: auto;
+        flex-direction: column;
+        padding-bottom: 50px;
+    }
+
+    .skills .icon {
+        width: auto;
+        height: auto;
+    }    
+
+    .skills .icon svg {
+        width: 80px;
+        height: 80px;
+    }
+
+    .skills .text {
+        width: 100%;
+        height: auto;
+        padding-top: 20px;
+    }
+
+    .skills .text p {
+        height: auto;
+        width: 100%;
+    }
+
+}

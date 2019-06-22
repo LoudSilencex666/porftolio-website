@@ -214,7 +214,7 @@
             </section>
 
             <!-- contact -->
-            {# <section class="view">
+            <!-- <section class="view">
                 <div class="contact">
                     <div class="title">
                         <h1>
@@ -229,7 +229,7 @@
                     </div>
                 </div>
             </section> #}
-
+            -->
         </div>
         
         <div class="fake-scroll-container">
@@ -243,9 +243,15 @@
         <script src="./js/backgroundAnimation.js"></script>
         <script>
             function initialization() {
-                fakeScroll();
+                const mobileMedia = window.matchMedia("(min-width: 768px)");
+                if (mobileMedia.matches) {
+                    fakeScroll();
+                } else {
+                    document.querySelector('.fake-scroll-container').style.display = 'none';
+                }
                 canvasBAInit();
             }
+
             initialization();
         </script>
     </body>
