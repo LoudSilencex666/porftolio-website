@@ -3,9 +3,7 @@ function fakeScroll() {
     let isAnimating = false;
     let scrollPosition = 0;
     let activeSection = 0;
-    console.log('działa')
     function fakeScrollAnimation(evt) {
-        console.log('działa')
         if (!isAnimating) {
             isAnimating = true;
     
@@ -48,9 +46,11 @@ function fakeScroll() {
     
     mobileMedia.addListener(mobileMedia => {
         if (mobileMedia.matches) {
+            document.querySelector('.content-container').style.left = '0%';
             document.querySelector('.fake-scroll-container').style.display = 'flex';
             window.addEventListener('wheel', fakeScrollAnimation);
         } else {
+            document.querySelector('.content-container').style.left = '0%';
             document.querySelector('.fake-scroll-container').style.display = 'none';
             window.removeEventListener('wheel', fakeScrollAnimation);
         }
