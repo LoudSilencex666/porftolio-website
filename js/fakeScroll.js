@@ -1,12 +1,14 @@
 function fakeScroll() {
+    const mobileMedia = window.matchMedia("(min-width: 768px)");
     let isAnimating = false;
     let scrollPosition = 0;
     let activeSection = 0;
-    window.addEventListener('wheel', function(evt) {
-        
+    console.log('działa')
+    function fakeScrollAnimation(evt) {
+        console.log('działa')
         if (!isAnimating) {
             isAnimating = true;
-
+    
             let turn;
             
             if (evt.deltaY > 0) {
@@ -14,7 +16,7 @@ function fakeScroll() {
             } else if (evt.deltaY < 0) {
                 turn = -1;
             }
-
+    
             if (scrollPosition == 0 && turn == -1) {
                 scrollPosition = scrollPosition;
                 activeSection = activeSection;
@@ -33,8 +35,26 @@ function fakeScroll() {
                 isAnimating = false;
             }, 100);
         }
+    
+    };
 
-    });
+    if (mobileMedia.matches) {
+        document.querySelector('.fake-scroll-container').style.display = 'flex';
+        window.addEventListener('wheel', fakeScrollAnimation);
+    } else {
+        document.querySelector('.fake-scroll-container').style.display = 'none';
+        window.removeEventListener('wheel', fakeScrollAnimation);
+    }
+    
+    mobileMedia.addListener(mobileMedia => {
+        if (mobileMedia.matches) {
+            document.querySelector('.fake-scroll-container').style.display = 'flex';
+            window.addEventListener('wheel', fakeScrollAnimation);
+        } else {
+            document.querySelector('.fake-scroll-container').style.display = 'none';
+            window.removeEventListener('wheel', fakeScrollAnimation);
+        }
+    });   
 }
 
 function moveFakeScroll(scrollPosition) {

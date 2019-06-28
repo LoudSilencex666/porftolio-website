@@ -30,7 +30,7 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        <div class="background-container main-container">
+        <div class="main-container background-container">
             <!-- Could contain some animations later -->
             <canvas id="backgroundAnimation"></canvas>
         </div>
@@ -247,15 +247,9 @@
         <script src="./js/backgroundAnimation.js"></script>
         <script>
             function initialization() {
-                const mobileMedia = window.matchMedia("(min-width: 768px)");
-                if (mobileMedia.matches) {
-                    fakeScroll();
-                } else {
-                    document.querySelector('.fake-scroll-container').style.display = 'none';
-                }
+                fakeScroll();
                 canvasBAInit();
             }
-
             initialization();
         </script>
     </body>
